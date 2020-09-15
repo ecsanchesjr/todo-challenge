@@ -18,10 +18,12 @@ public class TodoService {
     private TodoRepository todoRepository;
 
     @GetMapping("/todos")
+    @CrossOrigin
     public List<Todo> retrieveByActive(@RequestParam(value="active", defaultValue="1") Boolean active) {
         return todoRepository.findAllByIsActive(active);
     }
 
+    @CrossOrigin
     @PostMapping("/todos")
     public ResponseEntity<Object> createTodo(@RequestBody Todo todo) {
         Todo savedTodo = todoRepository.save(todo);
@@ -31,13 +33,16 @@ public class TodoService {
         return ResponseEntity.created(location).build();
     }
 
+    @CrossOrigin
     @PutMapping("/todos/{id}")
-    public ResponseEntity<Object> inactivateTodo(@RequestBody Todo todo, @PathVariable Long id) {
+    public ResponseEntity<Object> editTodo(@RequestBody Todo todo, @PathVariable Long id) {
         Optional<Todo> todoOptional = todoRepository.findById(id);
         if(!todoOptional.isPresent()) {
             return ResponseEntity.noContent().build();
         }
+
         todo.setId(id);
+        todo.setCreatedAt(todoOptional.get().getCreatedAt());
 
         if(todoOptional.get().getIsActive() != todo.getIsActive()) {
             if(todoOptional.get().getIsActive())
