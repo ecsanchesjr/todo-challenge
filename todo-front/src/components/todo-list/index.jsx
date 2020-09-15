@@ -27,8 +27,9 @@ export default class extends Component {
         return (
             <Grid container spacing={2} justify={"center"}>
                 <Grid item lg={8} xs={12}>
-                    <h1>Lista de Tarefas</h1>
-                    <Divider style={{ marginBottom: '15px' }} />
+                    <h1 className={"main-title"}>
+                        Lista de Tarefas
+                    </h1>
                     <Grid container justify={"space-between"}>
                         <Button
                             color={"primary"}

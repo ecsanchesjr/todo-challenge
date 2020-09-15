@@ -40,7 +40,6 @@ export default class TodoItem extends Component {
                             className={!this.state.isEditing ? "disabled-text-field" : ""}
                             value={this.state.task}
                             disabled={!this.state.isEditing}
-                            multiline
                             label={"Tarefa"}
                             onChange={event => this.setState({ task: event.target.value })}
                             autoFocus
@@ -48,7 +47,8 @@ export default class TodoItem extends Component {
                             helperText={"É necessário que exista uma descrição para a Tarefa"} />
                         :
                         <ListItemText
-                            primary={this.state.task} />
+                            primary={this.state.task}
+                            secondary={`${this.state.isDone ? 'Concluída' : 'Pendente'} - Criada em ${new Date(this.state.createdAt).toLocaleString('pt-BR')}.`} />
                 }
 
                 <IconButton
