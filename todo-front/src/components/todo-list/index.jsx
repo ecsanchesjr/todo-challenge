@@ -4,12 +4,13 @@ import { createTodo, getAllTodos, updateTodo } from '../../services/todoService'
 import TodoItem from '../todo-item';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import ListEmpty from '../list-empty';
 
 export default class extends Component {
     constructor() {
         super();
         this.state = {
-            list: [],
+            list: {},
             confirmRemoveDialog: false,
             addTaskDialog: false,
             removeAllDialog: false,
@@ -27,19 +28,19 @@ export default class extends Component {
             <Grid container spacing={2} justify={"center"}>
                 <Grid item lg={8} xs={12}>
                     <h1>Lista de Tarefas</h1>
-                    <Divider style={{marginBottom: '15px'}}/>
+                    <Divider style={{ marginBottom: '15px' }} />
                     <Grid container justify={"space-between"}>
-                        <Button 
+                        <Button
                             color={"primary"}
                             variant={"contained"}
                             onClick={() => this.setState({ addTaskDialog: true })}>
-                                ADICIONAR TAREFA
+                            ADICIONAR TAREFA
                             </Button>
-                        <Button 
+                        <Button
                             color={"secondary"}
                             variant={"contained"}
                             onClick={() => this.setState({ removeAllDialog: true })}>
-                                REMOVER CONCLUÍDAS
+                            REMOVER CONCLUÍDAS
                             </Button>
                     </Grid>
                 </Grid>
@@ -56,6 +57,10 @@ export default class extends Component {
                                     removeFromList={this.removeFromList.bind(this, id)}
                                 />
                             )
+                        }
+                        {
+                            Object.keys(this.state.list).length === 0 &&
+                            <ListEmpty />
                         }
                     </List>
                 </Grid>
@@ -90,14 +95,14 @@ export default class extends Component {
                             label="Tarefa"
                             fullWidth
                             onChange={event => this.setState({ newTask: event.target.value })}
-                            value={this.state.newTask} 
+                            value={this.state.newTask}
                             helperText={"É necessário que exista uma descrição para a Tarefa"}
                             inputProps={{ maxLength: 255 }} />
                     </DialogContent>
 
                     <DialogActions>
-                        <IconButton 
-                            color={"primary"} 
+                        <IconButton
+                            color={"primary"}
                             onClick={() => this.confirmAddTask()}
                             disabled={!this.state.newTask}>
                             <CheckIcon /> Confirmar
@@ -109,8 +114,8 @@ export default class extends Component {
                 </Dialog>
 
                 <Dialog
-                        open={this.state.removeAllDialog}
-                        onClose={() => this.setState({ removeAllDialog: false })} >
+                    open={this.state.removeAllDialog}
+                    onClose={() => this.setState({ removeAllDialog: false })} >
                     <DialogTitle> {'Deseja realmente remover todas as tarefas concluídas da Lista?'} </DialogTitle>
 
                     <DialogActions>
@@ -167,7 +172,7 @@ export default class extends Component {
             isDone: false
         });
 
-        if(status < 500) {
+        if (status < 500) {
             this.state.addTaskDialog = false;
             this.state.newTask = "";
             this.loadList();
@@ -175,15 +180,21 @@ export default class extends Component {
     }
 
     confirmRemoveAllDone() {
-        const allDones = Object.entries(this.state.list).map( ([id, todo])  => todo).filter(todo => todo.isDone);
-        Promise.all(allDones.map(todo => updateTodo({
-            id: todo.id,
-            task: todo.task,
-            isDone: todo.isDone,
-            isActive: false
-        }))).then(() => {
-            this.state.removeAllDialog = false;
-            this.loadList();
-        });
+        if (Object.keys(this.state.list).length !== 0) {
+            const allDones = Object.entries(this.state.list).map(([id, todo]) => todo).filter(todo => todo.isDone);
+            Promise.all(allDones.map(todo => updateTodo({
+                id: todo.id,
+                task: todo.task,
+                isDone: todo.isDone,
+                isActive: false
+            }))).then(() => {
+                this.state.removeAllDialog = false;
+                this.loadList();
+            });
+        } else {
+            this.setState({
+                removeAllDialog: false
+            });
+        }
     }
 }

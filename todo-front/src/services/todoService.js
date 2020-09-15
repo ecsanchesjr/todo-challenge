@@ -10,12 +10,12 @@ export const getAllTodos = async () => {
 }
 
 export const updateTodo = async (todo) => {
-    const { data, status } = await todoService.put(`/todos/${todo.id}`, {...todo});
+    const { data, status } = await todoService.put(`/todos/${todo.id}`, { ...todo });
     return status;
 }
 
 export const createTodo = async (todo) => {
-    const { data, status } = await todoService.post('/todos', {...todo});
+    const { data, status } = await todoService.post('/todos', { ...todo });
     return status;
 }
 

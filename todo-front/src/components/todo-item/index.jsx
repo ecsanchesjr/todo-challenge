@@ -22,7 +22,7 @@ export default class TodoItem extends Component {
             <ListItem
                 dense button={!this.state.isEditing} divider
                 onClick={() => this.toggleIsDone()}
-                className={this.state.isDone?"task-is-done":""}>
+                className={this.state.isDone ? "task-is-done" : ""}>
                 <Checkbox
                     checked={this.state.isDone}
                     disableTouchRipple
@@ -30,16 +30,15 @@ export default class TodoItem extends Component {
                     disableFocusRipple
                     disabled={this.state.isEditing}
                     color={"primary"}
-                    inputProps={{ 'aria-labelledby': this.state.task }}
-                />
+                    inputProps={{ 'aria-labelledby': this.state.task }} />
 
                 {
-                    this.state.isEditing ? 
-                        <TextField 
+                    this.state.isEditing ?
+                        <TextField
                             placeholder={"Informe a Tarefa"}
                             fullWidth
-                            className={ !this.state.isEditing?"disabled-text-field":"" }
-                            value={this.state.task} 
+                            className={!this.state.isEditing ? "disabled-text-field" : ""}
+                            value={this.state.task}
                             disabled={!this.state.isEditing}
                             multiline
                             label={"Tarefa"}
@@ -47,26 +46,26 @@ export default class TodoItem extends Component {
                             autoFocus
                             inputProps={{ maxLength: 255 }}
                             helperText={"É necessário que exista uma descrição para a Tarefa"} />
-                        : 
-                        <ListItemText 
+                        :
+                        <ListItemText
                             primary={this.state.task} />
                 }
 
-                <IconButton 
-                    color={"default"} 
-                    onClick={(e) => this.toggleEditFields(e) }
+                <IconButton
+                    color={"default"}
+                    onClick={(e) => this.toggleEditFields(e)}
                     disabled={this.state.isDone || !this.state.task}>
-                        {
-                            this.state.isEditing ? <SaveIcon /> : <EditIcon />
-                        }
+                    {
+                        this.state.isEditing ? <SaveIcon /> : <EditIcon />
+                    }
                 </IconButton>
 
-                <IconButton 
-                    color={'secondary'} 
+                <IconButton
+                    color={'secondary'}
                     onClick={(e) => this.onClickRemove(e)}>
-                        {
-                            this.state.isEditing ? <CloseIcon /> : <DeleteIcon />
-                        }
+                    {
+                        this.state.isEditing ? <CloseIcon /> : <DeleteIcon />
+                    }
                 </IconButton>
 
             </ListItem>
@@ -74,7 +73,7 @@ export default class TodoItem extends Component {
     }
 
     toggleIsDone() {
-        if(!this.state.isEditing) {
+        if (!this.state.isEditing) {
             this.setState({
                 isDone: !this.state.isDone
             }, () => {
@@ -93,8 +92,8 @@ export default class TodoItem extends Component {
         e.stopPropagation();
 
         // if the user are editing, the button will save the changes
-        if(this.state.isEditing) {
-            this.setState({ 
+        if (this.state.isEditing) {
+            this.setState({
                 isEditing: false,
                 textPreEditing: this.state.task
             }, () => {
@@ -105,7 +104,7 @@ export default class TodoItem extends Component {
                     isActive: this.state.isActive
                 });
             });
-        // if the user aren't editing, the action will open the text field to user edit
+            // if the user aren't editing, the action will open the text field to user edit
         } else {
             this.setState({
                 isEditing: true
@@ -117,12 +116,12 @@ export default class TodoItem extends Component {
         e.stopPropagation();
 
         // if the user are editing, the button have to be clicked to cancel operation without save
-        if(this.state.isEditing) {
-            this.setState({ 
+        if (this.state.isEditing) {
+            this.setState({
                 isEditing: false,
                 task: this.state.textPreEditing
             });
-        // if the user aren't editing, the button have to be clicked to remove a item of list
+            // if the user aren't editing, the button have to be clicked to remove a item of list
         } else {
             this.props.removeFromList();
         }
