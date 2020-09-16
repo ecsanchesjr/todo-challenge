@@ -161,7 +161,9 @@ export default class extends Component {
         });
 
         if (status < 500) {
-            this.state.confirmRemoveDialog = false;
+            this.setState({
+                confirmRemoveDialog: false
+            });
             this.loadList();
         }
     }
@@ -174,8 +176,10 @@ export default class extends Component {
         });
 
         if (status < 500) {
-            this.state.addTaskDialog = false;
-            this.state.newTask = "";
+            this.setState({
+                addTaskDialog: false,
+                newTask: ""
+            });
             this.loadList();
         }
     }
@@ -189,7 +193,9 @@ export default class extends Component {
                 isDone: todo.isDone,
                 isActive: false
             }))).then(() => {
-                this.state.removeAllDialog = false;
+                this.setState({
+                    removeAllDialog: false
+                });
                 this.loadList();
             });
         } else {
